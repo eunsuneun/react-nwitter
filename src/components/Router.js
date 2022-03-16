@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { HashRouter, Route, Switch } from "react-router-dom";
 import Auth from "../routes/Auth";
 import Home from "../routes/Home";
@@ -22,7 +22,9 @@ const AppRouter = ({ isLoggenIn, userObj }) => {
           <Redirect from="*" to="/" />
         </> :
         <>
-          <Route exact path="/"><Auth /></Route>
+          <Route exact path="/">
+            <Auth />
+          </Route>
           <Redirect from="*" to="/" />
         </>
         }

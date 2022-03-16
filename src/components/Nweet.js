@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { dbService } from "fbase";
+import { dbService, storageService } from "fbase";
 import { doc, deleteDoc, updateDoc } from "firebase/firestore";
+import { getStorage, ref, deleteObject } from "firebase/storage";
 
-const Nweet = ({nweetObj, isOwner}) => {
+const Nweet = ({ nweetObj, isOwner }) => {
   const [editing, setEditing] = useState(false);
   const [newNweet, setNewNweet] = useState(nweetObj.text);
   const onClickDelete = async () => {
@@ -10,6 +11,7 @@ const Nweet = ({nweetObj, isOwner}) => {
     if(ok) {
       // delete nweet
       await deleteDoc(doc(dbService, "nweets", `${nweetObj.id}`));
+      await deleteObject(ref(storageService, nweetObj.attachmentUrl));
     }
   };
   const toggleEditing = () => setEditing( prev => !prev );
@@ -29,9 +31,7 @@ const Nweet = ({nweetObj, isOwner}) => {
     toggleEditing();
     setNewNweet(nweetObj.text);
   };
-  useEffect(() => {
-    console.log('nweet page componentDidMounted')
-  },[])
+
   return (
     <>
       {editing ? (
@@ -44,7 +44,7 @@ const Nweet = ({nweetObj, isOwner}) => {
                   placeholder="edit your text"
                   value={newNweet}
                   onChange={onChangeInput}
-                  required
+                  required 
                 />
                 <button onClick={onClickCancel}>cancel</button>
                 <input type="submit" value="edit" />
@@ -54,9 +54,9 @@ const Nweet = ({nweetObj, isOwner}) => {
         </>
       ) : (
         <div style={{ margin: "10px 0" }}>
-          <span>{nweetObj.text}</span>
+          <h2>{nweetObj.text}</h2>
+          { nweetObj.attachmentUrl && <img src={nweetObj.attachmentUrl} width="150px" /> }
           <p>Creator: {nweetObj.creatorId}</p>
-          <p>true or false : {isOwner}</p>
           {isOwner && (
             <>
               <button onClick={toggleEditing}>Edit Nweet</button>

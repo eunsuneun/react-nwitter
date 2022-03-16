@@ -3,7 +3,7 @@ import React from "react";
 
 const Profile = () => {
   const onLogOutClick = () => {
-    return authService.signOut();
+    authService.signOut();
   }
   return (
     <>
