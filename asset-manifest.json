@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/react-nwitter-nomadcoders/static/css/main.a1bdc8fc.css",
+    "main.js": "/react-nwitter-nomadcoders/static/js/main.a8365412.js",
+    "index.html": "/react-nwitter-nomadcoders/index.html",
+    "main.a1bdc8fc.css.map": "/react-nwitter-nomadcoders/static/css/main.a1bdc8fc.css.map",
+    "main.a8365412.js.map": "/react-nwitter-nomadcoders/static/js/main.a8365412.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a1bdc8fc.css",
+    "static/js/main.a8365412.js"
+  ]
+}
