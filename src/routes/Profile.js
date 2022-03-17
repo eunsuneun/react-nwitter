@@ -7,6 +7,7 @@ const Profile = ({ refreshUser, userObj }) => {
   const [newDisplayName, setNewDisplayName] = useState(userObj.displayName);
   const onLogOutClick = () => {
     authService.signOut();
+    refreshUser();
   };
   const getMyNweets = async () => {
     const nweets = await query(collection(dbService, "nweets"), orderBy("createdAt"), where("creatorId", "==", userObj.uid));
@@ -32,15 +33,30 @@ const Profile = ({ refreshUser, userObj }) => {
   }, []);
 
   return (
-    <>
-      <h1>{userObj.displayName}의 Profile</h1>
-      <form onSubmit={onSubmitForm}>
-        <input type="text" placeholder="display name" value={newDisplayName} onChange={onChangeDisplayName}/>
-        <button>수정</button>
+    <div className="container">
+      <form onSubmit={onSubmitForm} className="profileForm">
+        <input
+          type="text"
+          placeholder="display name"
+          value={newDisplayName}
+          onChange={onChangeDisplayName}
+          autoFocus
+          className="formInput"
+        />
+        <input
+          type="submit"
+          value="Update Profile"
+          className="formBtn"
+          style={{
+            marginTop: 10,
+          }}
+        />
       </form>
-      <button onClick={onLogOutClick}>Log out</button>
-    </>
-  )
+      <span className="formBtn cancelBtn logOut" onClick={onLogOutClick}>
+        Log Out
+      </span>
+    </div>
+  );
 };
 
 export default Profile;

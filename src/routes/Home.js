@@ -1,50 +1,11 @@
-import React, { useEffect, useState, useRef } from "react";
-import { dbService, storageService } from "fbase";
-import { addDoc, collection, query, onSnapshot } from "firebase/firestore";
-import { ref, uploadString, getDownloadURL } from "firebase/storage";
+import React, { useEffect, useState } from "react";
+import { dbService } from "fbase";
+import { collection, query, onSnapshot } from "firebase/firestore";
+import NweetFactory from "components/NweetFactory";
 import Nweet from "components/Nweet";
-import { v4 as uuidv4 } from 'uuid';
 
 const Home = ({ userObj }) => {
-  const [nweet, setNweet] = useState("");
   const [nweets, setNweets] = useState([]);
-  const [attachment, setAttachment] = useState("");
-  const fileInput = useRef();
-  const onChangeInput = ({ target: { value } }) => {
-    setNweet(value);
-  };
-  const onSubmitForm = async (e) => {
-    e.preventDefault();
-    let attachmentUrl;
-    if(attachment !== "") {
-      const attachmentRef = ref(storageService, `${userObj.uid}/${uuidv4()}`);
-      await uploadString(attachmentRef, attachment, "data_url");
-      attachmentUrl = await getDownloadURL(ref(storageService, attachmentRef));
-    }
-    const nweetObj = {
-      text: nweet,
-      createdAt: Date.now(),
-      creatorId: userObj.uid,
-      attachmentUrl
-    }
-    await addDoc(collection(dbService, "nweets"), nweetObj);
-    setNweet("");
-    setAttachment("");
-    fileInput.current.value = "";
-  };
-  const onChangeFile = (event) => {
-    const {target:{files}} = event;
-    const theFile = files[0];
-    const reader = new FileReader();
-    reader.onloadend = (finishedEvent) => {
-      const { currentTarget: { result }} = finishedEvent;
-      setAttachment(result);
-    };
-    reader.readAsDataURL(theFile);
-  };
-  const onClickClearAttachment  = () => {
-    setAttachment("");
-  };
   useEffect(() => {
     const q = query(collection(dbService, "nweets"));
     onSnapshot(q, (snapshot) => {
@@ -58,25 +19,9 @@ const Home = ({ userObj }) => {
   }, []);
   
   return (
-    <>
-      <form onSubmit={onSubmitForm}>
-        <input
-          type="text"
-          maxLength={120}
-          placeholder="What's on your mind?"
-          value={nweet}
-          onChange={onChangeInput}
-        />
-        <input type="file" accept="image/*" onChange={onChangeFile} ref={fileInput}/>
-        <button type="submit">Nweet</button>
-        {attachment && (
-          <div>
-            <img src={attachment} width="50px" />
-            <button onClick={onClickClearAttachment}>Clear</button>
-          </div>
-        )}
-      </form>
-      <div>
+    <div className="container">
+      <NweetFactory userObj={userObj} />
+      <div style={{ marginTop: 30 }}>
         {nweets.map((nweet) => (
           <Nweet
             key={nweet.id}
@@ -86,7 +31,7 @@ const Home = ({ userObj }) => {
           />
         ))}
       </div>
-    </>
+    </div>
   );
 };
 

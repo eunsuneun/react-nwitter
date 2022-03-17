@@ -11,26 +11,36 @@ const AppRouter = ({ refreshUser, isLoggenIn, userObj }) => {
     <HashRouter>
       {isLoggenIn && <Navigation userObj={userObj} />}
       <Switch>
-        {isLoggenIn ?
-        <>
-          <Route exact path="/">
-            <Home userObj={userObj} />
-          </Route>
-          <Route exact path="/profile">
-            <Profile userObj={userObj} refreshUser={refreshUser}/>
-          </Route>
-          <Redirect from="*" to="/" />
-        </> :
-        <>
-          <Route exact path="/">
-            <Auth />
-          </Route>
-          <Redirect from="*" to="/" />
-        </>
-        }
+        {isLoggenIn ? (
+          <div
+            style={{
+              maxWidth: 890,
+              width: "100%",
+              margin: "0 auto",
+              marginTop: 80,
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <Route exact path="/">
+              <Home userObj={userObj} />
+            </Route>
+            <Route exact path="/profile">
+              <Profile userObj={userObj} refreshUser={refreshUser} />
+            </Route>
+            <Redirect from="*" to="/" />
+          </div>
+        ) : (
+          <>
+            <Route exact path="/">
+              <Auth />
+            </Route>
+            <Redirect from="*" to="/" />
+          </>
+        )}
       </Switch>
     </HashRouter>
-  )
+  );
 };
 
 export default AppRouter;
