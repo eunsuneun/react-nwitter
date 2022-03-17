@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { dbService, storageService } from "fbase";
 import { doc, deleteDoc, updateDoc } from "firebase/firestore";
 import { ref, deleteObject } from "firebase/storage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 
-const Nweet = ({ nweetObj, isOwner, userObj }) => {
+const Nweet = ({ nweetObj, isOwner }) => {
   const [editing, setEditing] = useState(false);
   const [newNweet, setNewNweet] = useState(nweetObj.text);
   const onClickDelete = async () => {
@@ -50,7 +50,7 @@ const Nweet = ({ nweetObj, isOwner, userObj }) => {
                   autoFocus
                   className="formInput"
                 />
-                <button onClick={onClickCancel} className="formBtn cancelBtn">cancel</button>
+                <input type="button" value="cancel" onClick={onClickCancel} className="formBtn cancelBtn" />
                 <input type="submit" value="edit" className="formBtn"/>
               </form>
             </>
@@ -73,8 +73,6 @@ const Nweet = ({ nweetObj, isOwner, userObj }) => {
           )}
         </div>
       )}
-
-      <hr />
     </div>
   );
 };
