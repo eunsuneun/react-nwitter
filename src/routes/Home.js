@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { dbService, storageService } from "fbase";
 import { addDoc, collection, query, onSnapshot } from "firebase/firestore";
 import { ref, uploadString, getDownloadURL } from "firebase/storage";
@@ -9,7 +9,7 @@ const Home = ({ userObj }) => {
   const [nweet, setNweet] = useState("");
   const [nweets, setNweets] = useState([]);
   const [attachment, setAttachment] = useState("");
-
+  const fileInput = useRef();
   const onChangeInput = ({ target: { value } }) => {
     setNweet(value);
   };
@@ -30,6 +30,7 @@ const Home = ({ userObj }) => {
     await addDoc(collection(dbService, "nweets"), nweetObj);
     setNweet("");
     setAttachment("");
+    fileInput.current.value = "";
   };
   const onChangeFile = (event) => {
     const {target:{files}} = event;
@@ -66,7 +67,7 @@ const Home = ({ userObj }) => {
           value={nweet}
           onChange={onChangeInput}
         />
-        <input type="file" accept="image/*" onChange={onChangeFile} />
+        <input type="file" accept="image/*" onChange={onChangeFile} ref={fileInput}/>
         <button type="submit">Nweet</button>
         {attachment && (
           <div>

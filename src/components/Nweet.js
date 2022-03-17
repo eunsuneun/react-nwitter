@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { dbService, storageService } from "fbase";
 import { doc, deleteDoc, updateDoc } from "firebase/firestore";
-import { getStorage, ref, deleteObject } from "firebase/storage";
+import { ref, deleteObject } from "firebase/storage";
 
-const Nweet = ({ nweetObj, isOwner }) => {
+const Nweet = ({ nweetObj, isOwner, userObj }) => {
   const [editing, setEditing] = useState(false);
   const [newNweet, setNewNweet] = useState(nweetObj.text);
   const onClickDelete = async () => {
@@ -56,7 +56,7 @@ const Nweet = ({ nweetObj, isOwner }) => {
         <div style={{ margin: "10px 0" }}>
           <h2>{nweetObj.text}</h2>
           { nweetObj.attachmentUrl && <img src={nweetObj.attachmentUrl} width="150px" /> }
-          <p>Creator: {nweetObj.creatorId}</p>
+          <p>작성자: {userObj.email}</p>
           {isOwner && (
             <>
               <button onClick={toggleEditing}>Edit Nweet</button>
